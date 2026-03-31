@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MK_TECH // Digital Dossier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --neon: #00f2ff;
+            --tech-purple: #7000ff;
+            --dark-bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(0, 242, 255, 0.2);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Courier New', monospace; 
+        }
+        html { 
+            scroll-behavior: smooth; 
+        }
+        body { 
+            background-color: var(--dark-bg); 
+            color: var(--text-main); 
+            overflow-x: hidden; 
+        }
+
+        /* Background Canvas */
+        #bg-canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            z-index: -1; 
+        }
+
+        /* Navigation */
+        nav {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 1rem 5%; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000;
+            backdrop-filter: blur(12px); 
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(5, 5, 5, 0.8);
+        }
+        .logo { 
+            font-weight: bold; 
+            color: var(--neon); 
+            letter-spacing: 2px; }
+        nav ul { 
+            display: flex; 
+            list-style: none; 
+            gap: 20px; }
+        nav ul a { 
+            text-decoration: none; 
+            color: var(--text-dim); 
+            font-size: 0.8rem; 
+            transition: 0.3s; }
+        nav ul a:hover { 
+            
+            color: var(--neon); 
+            text-shadow: 0 0 10px var(--neon); }
+
+        /* Hero / Dossier Section */
+        .hero {
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            padding: 0 10%; 
+            text-align: left;
+        }
+        .dossier-card {
+            border: 1px solid var(--glass-border); 
+            padding: 40px; 
+            max-width: 800px;
+            background: var(--glass); 
+            position: relative; 
+            backdrop-filter: blur(5px);
+        }
+        .dossier-card::before {
+            content: "CONFIDENTIAL // AGENT_DATA"; 
+            position: absolute; 
+            top: -12px; 
+            left: 20px;
+            background: var(--tech-purple); 
+            padding: 2px 10px; 
+            font-size: 0.7rem; 
+            font-weight: bold;
+        }
+        .glitch { 
+            font-size: clamp(2rem, 5vw, 4rem); 
+            color: var(--neon); 
+            margin: 0; 
+            animation: shift 4s infinite; 
+        }
+
+        @keyframes 
+        shift { 
+            0%, 100% { transform: translateX(0); } 
+            2% { transform: translateX(5px); } 
+            4% { transform: translateX(-5px); } 
+        }
+
+        .hero p { 
+            line-height: 1.8; 
+            color: var(--text-dim); 
+            margin-top: 20px; 
+            font-size: 1.1rem; 
+        }
+
+        /* Terminal Activity Section */
+        .terminal-container {
+            background: #000; 
+            border: 1px solid #333; 
+            padding: 20px;
+            margin-top: 30px; 
+            font-size: 0.9rem; 
+            color: #0f0; 
+            border-radius: 5px;
+        }
+        .time { 
+            color: #555; 
+            margin-right: 10px; 
+        }
+
+        /* Skills Section */
+        section { 
+            padding: 100px 10%; 
+        }
+
+        .section-title { 
+            color: var(--neon); 
+            margin-bottom: 50px; 
+            text-transform: uppercase; 
+            letter-spacing: 5px; 
+        }
+        
+        .skills-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+        }
+        
+        .skill-category { 
+            background: rgba(0, 242, 255, 0.02); 
+            padding: 25px; 
+            border-left: 3px solid var(--tech-purple); 
+        }
+
+        .skill-bar { 
+            height: 8px; 
+            background: rgba(255,255,255,0.1); 
+            margin: 15px 0 25px; 
+            border-radius: 4px; 
+            overflow: hidden; 
+        }
+
+        .fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--tech-purple), var(--neon)); 
+            width: 0; 
+            transition: 2s cubic-bezier(0.1, 0, 0.1, 1); 
+        }
+
+        /* Project Cards */
+        .project-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+        }
+
+        .project-card {
+            background: var(--glass); 
+            border: 1px solid var(--glass-border); 
+            padding: 30px;
+            transition: 0.4s; 
+            position: relative; 
+            overflow: hidden;
+        }
+        .project-card:hover { 
+            border-color: var(--neon); 
+            transform: translateY(-5px); 
+            box-shadow: 0 0 20px rgba(0,242,255,0.1); 
+        }
+
+        .metrics { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 20px; 
+            font-size: 0.7rem; 
+        }
+
+        .metrics span { 
+            border: 1px solid var(--tech-purple); 
+            color: var(--tech-purple); 
+            padding: 2px 8px; 
+        }
+
+        /* Contact Section */
+        .contact-box {
+            max-width: 600px; 
+            margin: 0 auto; 
+            text-align: center; 
+            border: 1px solid var(--glass-border); padding: 40px; 
+        }
+        
+        input, textarea {
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            border-bottom: 1px solid #333;
+            color: var(--neon); 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            outline: none;
+        }
+
+        .cta-btn {
+            background: transparent; 
+            border: 1px solid var(--neon); 
+            color: var(--neon);
+            padding: 12px 30px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            display: inline-block; 
+            text-decoration: none;
+        }
+        
+        .cta-btn:hover { 
+            background: var(--neon); 
+            color: #000; 
+            box-shadow: 0 0 20px var(--neon); 
+        }
+
+        @media (max-width: 768px) { 
+            .skills-grid { grid-template-columns: 1fr; } 
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav>
+        <div class="logo">MK_ADMIN.SYS</div>
+        <ul>
+            <li><a href="#about">01_ABOUT</a></li>
+            <li><a href="#skills">02_ARSENAL</a></li>
+            <li><a href="#projects">03_DEPLOYMENTS</a></li>
+            <li><a href="#contact">04_UPLINK</a></li>
+        </ul>
+    </nav>
+
+    <header id="about" class="hero">
+        <div class="dossier-card reveal">
+            <h1 class="glitch">MUBASHSHERA KHAN</h1>
+            <p>
+                <strong>POSITION:</strong> Full-Stack Developer & Development Intern at <span style="color:var(--neon)">III Robotics</span>.<br>
+                <strong>LEVEL:</strong> B.Tech 3rd Year (CSE - Data Science).<br>
+                Bridging the gap between Frontend Sorcery and Quantum Explorations. Crafting high-performance digital systems that inspire.
+            </p>
+            
+            <div class="terminal-container">
+                <div id="terminal-lines"></div>
+                <span class="cursor">_</span>
+            </div>
+        </div>
+    </header>
+
+    <section id="skills">
+        <h2 class="section-title reveal">Technical Arsenal</h2>
+        <div class="skills-grid">
+            <div class="skill-category reveal">
+                <div style="display:flex; justify-content:space-between"><span>React / Next.js / TypeScript</span><span>95%</span></div>
+                <div class="skill-bar"><div class="fill" style="width: 95%;"></div></div>
+                <div style="display:flex; justify-content:space-between"><span>Quantum / Qiskit</span><span>70%</span></div>
+                <div class="skill-bar"><div class="fill" style="width: 70%;"></div></div>
+            </div>
+            <div class="skill-category reveal">
+                <div style="display:flex; justify-content:space-between"><span>Python / Node.js</span><span>90%</span></div>
+                <div class="skill-bar"><div class="fill" style="width: 90%;"></div></div>
+                <div style="display:flex; justify-content:space-between"><span>Competitive Programming</span><span>85%</span></div>
+                <div class="skill-bar"><div class="fill" style="width: 85%;"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title reveal">Past Deployments</h2>
+        <div class="project-grid">
+            <div class="project-card reveal">
+                <h3>Mubs Cine</h3>
+                <p>Interactive cinema experience with real-time seat selection and API integration.</p>
+                <div class="metrics"><span>UI_OPTIMIZED</span><span>LIVE_API</span></div>
+                <a href="https://mubashsherakhan.github.io/Mubs_Cine/" class="cta-btn" style="margin-top:20px; font-size:0.7rem;">ACCESS_LIVE</a>
+            </div>
+            <div class="project-card reveal">
+                <h3>Periodic Table</h3>
+                <p>Advanced CSS Grid layout visualizing chemical elements with dynamic data injection.</p>
+                <div class="metrics"><span>DATA_VIS</span><span>CSS_GRID</span></div>
+                <a href="https://mubashsherakhan.github.io/Periodic-Table/" class="cta-btn" style="margin-top:20px; font-size:0.7rem;">ACCESS_LIVE</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="contact-box reveal">
+            <h2 style="color:var(--neon); margin-bottom: 20px;">SECURE_UPLINK</h2>
+            <form action="#" method="POST">
+                <input type="text" placeholder="IDENTIFIER (NAME)" required>
+                <input type="email" placeholder="COMMS_CHANNEL (EMAIL)" required>
+                <textarea rows="4" placeholder="ENCRYPTED_MESSAGE" required></textarea>
+                <button type="submit" class="cta-btn" style="width:100%">TRANSMIT_MESSAGE</button>
+            </form>
+        </div>
+    </section>
+
+    <footer style="padding: 40px; text-align: center; color: #8b7e7e; font-size: 0.7rem;">
+       © MUBASHSHERA KHAN - 2026 | ALL SYSTEMS OPERATIONAL
+    </footer>
+
+    <script>
+        // 1. Particle Background Logic (From your files)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let points = [];
+        for(let i=0; i<80; i++) points.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5});
+        
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(0, 242, 255, 0.1)';
+            ctx.fillStyle = 'rgba(0, 242, 255, 0.3)';
+            points.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0 || p.x>canvas.width) p.vx *= -1;
+                if(p.y<0 || p.y>canvas.height) p.vy *= -1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); ctx.fill();
+                points.forEach(p2 => {
+                    let d = Math.hypot(p.x-p2.x, p.y-p2.y);
+                    if(d<150) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); }
+                });
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        // 2. Terminal Auto-Typer Logic (From your activity.html)
+        const logs = [
+            "Initializing GitHub Sync...",
+            "Fetched Intern Status: III Robotics",
+            "Environment: B.Tech 3rd Year (Data Science)",
+            "System: Deep Work logged at NTS 2025 Center",
+            "Deployed: Mubs_Cine to Production",
+            "Ready for new missions."
+        ];
+        const termContainer = document.getElementById('terminal-lines');
+        let lineIdx = 0;
+        function typeLog() {
+            if(lineIdx < logs.length) {
+                const line = document.createElement('div');
+                line.innerHTML = `<span class="time">[${new Date().toLocaleTimeString()}]</span> > ${logs[lineIdx]}`;
+                termContainer.appendChild(line);
+                lineIdx++;
+                setTimeout(typeLog, 1200);
+            }
+        }
+        typeLog();
+
+        // 3. Scroll Reveal Logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                    // Trigger skill bars if they exist
+                    const bars = entry.target.querySelectorAll('.fill');
+                    bars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => bar.style.width = width, 200);
+                    });
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(30px)";
+            el.style.transition = "1s ease-out";
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

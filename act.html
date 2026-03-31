@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MK_TECH // Internal_Data</title>
+    <style>
+        :root { 
+            --neon: #00f2ff; 
+            --bg: #050505; 
+            --tech-purple: #7000ff; 
+        }
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Courier New', monospace; 
+            padding: 50px; 
+            line-height: 1.6; 
+        }
+        
+        .back-nav { 
+            margin-bottom: 40px; 
+        }
+        .back-link { 
+            color: var(--neon); 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+        }
+        .back-link:hover { 
+            text-decoration: underline; 
+        }
+
+        .content-card {
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 40px; 
+            background: rgba(255,255,255,0.02);
+            position: relative;
+        }
+        .content-card::before {
+            content: "DATA_FILE"; 
+            position: absolute; 
+            top: -12px; left: 20px;
+            background: var(--tech-purple); 
+            padding: 2px 10px; 
+            font-size: 0.7rem;
+        }
+        h1 { 
+            color: var(--neon); 
+            margin-top: 0; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="back-nav">
+        <a href="Port2.html" class="back-link"> RETURN_TO_HUB</a>
+    </div>
+
+    <main class="content-card">
+        <h1>My Activity</h1>
+        <p>
+        <!-- <p><pre>System data loading...</pre> -->
+        Hello!
+        I am Mubashshera Khan, a passionate web developer focused on building clean, user-friendly, 
+        and responsive sites. I love turning complex problems into beautiful digital experiences.
+        Pursuing a B.Tech. Degree in Computer Science & Engineering(Data Science), I am currently in 3<sup>rd</sup> Year.            
+        Apart from my academics, I am currently working in a startup, <span class="highlight">III Robotics</span>, as a <span class="highlight">Developmet Intern</span>, 
+        where I am honing my skills and contributing to innovative projects in the tech industry. 
+        I am also a competitive programmer, always eager to solve challenging problems and improve my coding skills.
+        I am a Tech Enthusiast, constantly learning and experimenting with new technologies to stay at the forefront of the industry.
+        Being a lifelong learner, always seeking opportunities to grow and expand my knowledge in the ever-evolving field of technology.
+        Along with this I also contributed as a volunteering coordinator during AMP National Talent Search (NTS) 2025 at the Exam Center.  
+        </p>
+        <div id="terminal"></div>
+    <span class="cursor"></span>
+    </main>
+
+</body>
+</html>
